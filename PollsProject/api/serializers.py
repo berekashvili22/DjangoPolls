@@ -18,6 +18,7 @@ class VoteSerializer(serializers.ModelSerializer):
         model = Vote
         fields = ('__all__')
         optional_fields = ['user',]
+        validators = []
     
     def save(self):
         user = self.context['request'].user
