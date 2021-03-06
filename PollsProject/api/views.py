@@ -12,11 +12,9 @@ from django.shortcuts import get_object_or_404
 @api_view(['GET'])
 def apiOverview(request):
     api_urls = {
-        'List':'task-list',
-        'Detail View':'/task-detail/<str:pk>',
-        'Create':'/task-create/',
-        'Update':'/task-update/<str:pk>',
-        'Delete':'/task-delete/<str:pk>',
+        'Question List':'question-list',
+        'Question Detail View':'question-detail/<str:pk>/',
+        'Create Vote':'question-vote/',
     }
     return Response(api_urls)
 
@@ -35,6 +33,14 @@ def questionDetail(request, pk):
     question_serializer = QuestionSerializer(question, many=False)
     choices_serializer = ChoiceSerializer(choices, many=True)
 
+    # 
+    user = request.user
+    vote = Vote.objects.filter(user=user, choice__in=choices)
+    current_user_vote_status = None
+    if vote:
+        current_user_vote_status = 'you already voted'
+    else:
+        current_user_vote_status = 'you can vote'
     if question.completed == False:
         data = {
             'question': question_serializer.data,
@@ -53,6 +59,7 @@ def questionDetail(request, pk):
             'question': question_serializer.data,
             'choices_text': choices_text,
             'votes_count': votes_count,
+            'current_user_vote_status': current_user_vote_status,
         }
 
     return Response(data)
