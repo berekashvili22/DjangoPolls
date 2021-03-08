@@ -1,0 +1,23 @@
+{% extends 'polls/main.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <div class="container mt-5 p-4 border" id="">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="mb-2" style="font-weight: bold;">DailyPoll</legend>
+                <h6>Log In</h6>
+                <hr>
+                {{ form|crispy }}
+                <div class="form-group">
+                    <button class="btn btn-primary">Log In</button>
+                </div>
+            </fieldset>
+        </form>
+        <hr>
+        <div class="pt-2">
+            <small class="text-muted mr-2">Need An Account ?</small> <a href="{% url 'register' %}">Sing Up</a>
+        </div>
+    </div>
+{% endblock content %}
