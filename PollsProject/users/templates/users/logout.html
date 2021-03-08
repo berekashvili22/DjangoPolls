@@ -1,0 +1,11 @@
+{% extends 'polls/main.html' %}
+{% load static %}
+{% block content %}
+    <div class="container mt-3 p-4 border" id="register-container">
+        <h2>You have been logged out</h2>
+        <hr>
+        <div class="pt-2">
+            <a href="{% url 'login' %}">Sing In Again</a>
+        </div>
+    </div>
+{% endblock content %}
