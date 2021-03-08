@@ -1,0 +1,53 @@
+{% extends 'polls/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="polls-list-wrap" id="listWrapper">
+</div>
+
+<script>
+    getList()
+
+    function getList() {
+        var listWrapper = document.getElementById('listWrapper')
+
+        var url = 'http://127.0.0.1:8000/api/question-list/'
+        fetch(url)
+        .then((resp) => resp.json())
+        .then(function(data) {
+            console.log(data)
+            var pollsList = data
+            for (var i in pollsList) {
+                
+                var pollText = pollsList[i]['question_text']
+                var pollId = pollsList[i]['id']
+
+                var poll = `
+                <div class="poll-wrap">
+                    <div class="poll-title">
+                        ${pollText}
+                    </div>
+                    <div class="actions">
+                        <button class='view-poll-btn'>View</button>    
+                    </div>
+                </div>
+                `
+                listWrapper.insertAdjacentHTML('beforeend', poll)
+
+                var viewPollBtn = document.getElementsByClassName('view-poll-btn')
+
+                for (var i=0; i<viewPollBtn.length; i++) {
+                    viewPollBtn[i].addEventListener('click', function(){
+                        window.location.replace(`/poll/${pollId}/`);
+                    })
+                };
+
+            };
+
+        });
+    };
+
+
+</script>
+{% endblock content %}
+
