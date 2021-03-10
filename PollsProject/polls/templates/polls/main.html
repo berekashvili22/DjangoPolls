@@ -8,10 +8,10 @@
     <title>Polls</title>
     <!-- bootstrap -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-
     <!-- local css -->
     <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+    <!-- google icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <!-- google fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
@@ -28,8 +28,13 @@
           <li class="nav-li"><a class="nav-link" href="#">Contact</a></li>
         </ul>
         <ul class="nav-links-ul auth-ul">
+          {% if user.is_authenticated %}
+          <li class="nav-li auth-li" style="background-color: #333; text-transform: uppercase;"><a class="nav-link" href="#">{{ user.username }}</a></li>
+          <li class="nav-li auth-li"><a class="nav-link auth-link" href="{% url 'logout' %}">Logout</a></li>
+          {% else %}
           <li class="nav-li auth-li"><a class="nav-link auth-link" href="{% url 'login' %}">Login</a></li>
           <li class="nav-li auth-li"><a class="nav-link auth-link" href="{% url 'register' %}">Register</a></li>
+          {% endif %}
         </ul>
       </div>
       <div class="burger">
