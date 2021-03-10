@@ -2,17 +2,25 @@
 {% load static %}
 {% block content %}
 
+<!-- wrapper for poll details -->
 <div class="poll-detail-wrap" data-id={{ pk }} id="pollDetailWrap">
     <div class="poll-detail-question-wrap" id="pollQuestionWrap"></div>
     <div class="poll-options-wrap" id="pollOptionsWrap"></div>
     <div class="vote-btns-wrap" id="voteOptionsWrap"></div>
+    <div class="poll-error-message-wrap">
+        <p class="error-message" id="errorMsg"></p>
+    </div>
 </div>
 
+<!-- wrapper for chart -->
 <div id="myChart" class="poll-chart-wrap"></div>
 
-
+<!-- import zingchart -->
 <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+
 <script type="text/javascript">
+    
+    // generate csrf token to make API call
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -29,151 +37,221 @@
         return cookieValue;
     }
     var csrftoken = getCookie('csrftoken');
-
+    
+    // main function that loads all poll information and builds chart
     getPoll()
 
     function getPoll() {
+        
+        // get wrapper divs to put data later
         var pollQuestionWrap = document.getElementById('pollQuestionWrap')
         var pollOptionsWrap = document.getElementById('pollOptionsWrap')
         var voteOptionsWrap = document.getElementById('voteOptionsWrap')
+        // get poll id (sent via view/context) to pass in url
+        // to get concrete poll data from API 
         var pollId = pollDetailWrap.dataset.id
 
+
+        // make api call
         var url = `http://127.0.0.1:8000/api/question-detail/${pollId}/`
         fetch(url)
         .then((resp) => resp.json())
+        // get data from api
         .then(function(data) {
-            console.log(data)
+
+            // create data instance
             var pollDetail = data
+            // get poll status (expired or not)
+            var isExpired = pollDetail['question']['completed']
+            // create empty variable to inster data later
             var pollOptions = ''
+
+            // create poll header (question text)
             var pollHeader = `
                 <h2 class="poll-detail-question">${pollDetail['question']['question_text']}</h2>
             </div>
             `
+            // get all choices    
+            var choices = pollDetail['choices']
 
-            if (pollDetail['question']['completed'] == true) {
-                console.log('quiz is done ')
-            } else {
-                var choices = pollDetail['choices']
+            // loop through that choices
+            for (var i=0; i < choices.length; i++) {
+                // get choice text
+                var choiceText = choices[i]['choice_text']
+                // get choice id
+                var choiceId = choices[i]['id']
 
-                for (var i=0; i < choices.length; i++) {
-                    var choiceText = choices[i]['choice_text']
-                    var choiceId = choices[i]['id']
-                    var choiceQuestionId = choices[i]['question']
+                // es ra jandabad mindoda ?
+                // var choiceQuestionId = choices[i]['question']
 
-                    pollOptions += `
-                        <div class="choice-wrap">
-                            <input type="radio" id="opt${choiceId}" name="choice" value="${choiceId}" class="choices">
-                            <label for="opt${choiceId}">${choiceText}</label>
-                        </div>
-                    `
-                }
-
-                voteBtnContent = `
-                    <button type="submit" class="vote-btn" id='voteBtn'>Vote</button>
+                // add choice details to pollOptions variable
+                pollOptions += `
+                    <div class="choice-wrap">
+                        <input type="radio" id="opt${choiceId}" name="choice" value="${choiceId}" class="choices">
+                        <label for="opt${choiceId}">${choiceText}</label>
+                    </div>
                 `
+            }
 
-                pollOptionsWrap.insertAdjacentHTML('beforeend', pollOptions)
-                pollQuestionWrap.insertAdjacentHTML('beforeend', pollHeader)
-                voteOptionsWrap.insertAdjacentHTML('beforeend', voteBtnContent)
-                
-                var voteBtn = document.getElementById('voteBtn')
+            // create vote button
+            voteBtnContent = `
+                <button type="submit" class="vote-btn" id='voteBtn'>Vote</button>
+            `
+            // instert contect to html
+            pollOptionsWrap.insertAdjacentHTML('beforeend', pollOptions)
+            pollQuestionWrap.insertAdjacentHTML('beforeend', pollHeader)
+            voteOptionsWrap.insertAdjacentHTML('beforeend', voteBtnContent)
 
-                if (pollDetail['canVote'] == true) {
-                    voteBtn.addEventListener('click', function(){
-                        console.log('clicked')
-                        var choiceId = document.querySelector("input[name=choice]:checked").value
-                        voteChoice(choiceId)
-                        disableVote()
-                    })
+            // get vote button
+            var voteBtn = document.getElementById('voteBtn')
+            
+            // check if user can vote
 
-                } else {
+            // add eventlistener to button if user can vote 
+            // call voteChoice function on click
+            if (pollDetail['canVote'] == true) {
+                voteBtn.addEventListener('click', function(){
+                    // on click call validation function
+                    validateForm()
+                })
+
+            // if user can't vote check for few options and update data based on that options
+            } else {
+
+                // OPTION 1
+                // user voted and poll is not expired
+                if (data['userChoiceId'] && isExpired == false) {
+                    // check choice radio input user voted on
                     document.getElementById(`opt${data['userChoiceId']}`).checked = true;
+                    voteBtn.innerText = 'Voted'
+                    disableVote()
+
+                // OPTION 2
+                // user voted and poll is expired
+                } else if (data['userChoiceId'] && isExpired == true) {
+                    // check choice radio input user voted on
+                    document.getElementById(`opt${data['userChoiceId']}`).checked = true;
+                    disableVote()
+                    voteBtn.innerText = 'Poll Expired'
+
+                // OPTION 3
+                // user did not vote and poll is expired
+                } else if (!data['userChoiceId']) {
+                    voteBtn.innerText = 'Poll Expired'
                     disableVote()
                 }
 
-             
             }
+        
 
-            buildChart()
-
-            function voteChoice(choice){
-                fetch('http://127.0.0.1:8000/api/question-vote/', {
-                    method:'POST', 
-                    headers:{
-                        'Content-type':'application/json',
-                        'X-CSRFToken':csrftoken,
-                    },
-                    body:JSON.stringify({'choice':choice,})
-                }).then((response) => {
-                    console.log('voted')
-                })
-            }
-
-            function disableVote() {
-                var choices = document.getElementsByClassName('choices')
-                for (var i=0; i < choices.length; i++) {
-                    choices[i].disabled = true;
-                    voteBtn.innerText = 'Voted'
+        // form validtion
+        function validateForm() {
+            // create valid variable and set default value to false
+            valid = false;
+            // get all choice inputs
+            var choices = document.getElementsByClassName('choices')
+            // check if any of them is checked
+            for (var i=0; i < choices.length; i++) {
+                // if any of inputs is checked set valid to true
+                if(choices[i].checked) {
+                    valid = true;
+                    break
                 }
             }
+            // if form is valid send data to server and disable all inputs
+            if (valid == true) {
+                var choiceId = document.querySelector("input[name=choice]:checked").value
+                voteChoice(choiceId)
+                disableVote()
+                document.getElementById('errorMsg').innerText = ''
+            // if form is not valid show error message
+            } else {
+                document.getElementById('errorMsg').innerText = 'Please select choice'
+            }
+        }
+        
+        // build chart
+        buildChart()
+        
+        
+        // function to create vote
+        function voteChoice(choice){
+            fetch('http://127.0.0.1:8000/api/question-vote/', {
+                method:'POST', 
+                headers:{
+                    'Content-type':'application/json',
+                    'X-CSRFToken':csrftoken,
+                },
+                body:JSON.stringify({'choice':choice,})
+            }).then((response) => {
+                // console.log('voted')
+            })
+        }
 
-            // chart 1
-            
-            function buildChart() {
-                var chartData = {
-                    'type':'bar',
-                    'backgroundColor':'none', // This is in the root
-                    'plotarea':{
-                        backgroundColor:'transparent'
-                    },
-                    'plot': {
-                        'value-box': {
-                        //Displays all data values by default.
-                        },
-                        backgroundColor: '#4b5a72',
-                    },
-                    'title': {
-                        // text: 'Results',
-                        fontSize: 18,
-                        fontColor: '#854125',
-                    },
-                    'scale-x':{
-                        'labels': data['choices_text'],
-                        'item': {
-                            "fontSize": 13,
-                            'font-color': '#854125',
-                            "mediaRules": [{
-                                "maxWidth": 400,
-                                "fontSize": 10,
-                                "angle": 45
-                            }],
-                        },
-                        // 'wrapText': true,
-                        // 'angle': -50,
-                    },
-                    'series':[
-                        {
-                            'values': data['votes_count'],
-                        }
-                    ],
-                    'scale-y':{
-                        values: "0:100:10",
-                        'item': {
-                            'font-color': '#854125',
-                        },
+        // function to disable choice inputs
+        function disableVote() {
+            var choices = document.getElementsByClassName('choices')
+            for (var i=0; i < choices.length; i++) {
+                choices[i].disabled = true;
+            }
+        }
 
+        // function to build chart
+        function buildChart() {
+            var chartData = {
+                'type':'bar',
+                'backgroundColor':'none', // This is in the root
+                'plotarea':{
+                    backgroundColor:'transparent'
+                },
+                'plot': {
+                    'value-box': {
+                    //Displays all data values by default.
                     },
-                }
+                    backgroundColor: '#4b5a72',
+                },
+                'title': {
+                    // text: 'Results',
+                    fontSize: 18,
+                    fontColor: '#854125',
+                },
+                'scale-x':{
+                    'labels': data['choices_text'],
+                    'item': {
+                        "fontSize": 13,
+                        'font-color': '#854125',
+                        "mediaRules": [{
+                            "maxWidth": 400,
+                            "fontSize": 10,
+                            "angle": 45
+                        }],
+                    },
+                    // 'wrapText': true,
+                    // 'angle': -50,
+                },
+                'series':[
+                    {
+                        'values': data['votes_count'],
+                    }
+                ],
+                'scale-y':{
+                    values: "0:100:10",
+                    'item': {
+                        'font-color': '#854125',
+                    },
 
-                zingchart.render({
-                    id:'myChart',
-                    data: chartData,
-                })
-
+                },
             }
 
-        });
-    };
+            zingchart.render({
+                id:'myChart',
+                data: chartData,
+            })
+
+        }
+
+    });
+};
 
 
 </script>
