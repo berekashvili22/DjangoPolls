@@ -1,0 +1,213 @@
+{% extends 'polls/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="poll-detail-wrap" data-id={{ pk }} id="pollDetailWrap">
+    <div class="poll-detail-question-wrap" id="pollQuestionWrap"></div>
+    <div class="poll-options-wrap" id="pollOptionsWrap"></div>
+    <div class="vote-btns-wrap" id="voteOptionsWrap"></div>
+</div>
+
+<div id="myChart" class="poll-chart-wrap"></div>
+
+
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+<script type="text/javascript">
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    getPoll()
+
+    function getPoll() {
+        var pollQuestionWrap = document.getElementById('pollQuestionWrap')
+        var pollOptionsWrap = document.getElementById('pollOptionsWrap')
+        var voteOptionsWrap = document.getElementById('voteOptionsWrap')
+        var pollId = pollDetailWrap.dataset.id
+
+        var url = `http://127.0.0.1:8000/api/question-detail/${pollId}/`
+        fetch(url)
+        .then((resp) => resp.json())
+        .then(function(data) {
+            console.log(data)
+            var pollDetail = data
+            var pollOptions = ''
+            var pollHeader = `
+                <h2 class="poll-detail-question">${pollDetail['question']['question_text']}</h2>
+            </div>
+            `
+
+            if (pollDetail['question']['completed'] == true) {
+                console.log('quiz is done ')
+            } else {
+                var choices = pollDetail['choices']
+
+                for (var i=0; i < choices.length; i++) {
+                    var choiceText = choices[i]['choice_text']
+                    var choiceId = choices[i]['id']
+                    var choiceQuestionId = choices[i]['question']
+
+                    pollOptions += `
+                        <div class="choice-wrap">
+                            <input type="radio" id="opt${choiceId}" name="choice" value="${choiceId}" class="choices">
+                            <label for="opt${choiceId}">${choiceText}</label>
+                        </div>
+                    `
+                }
+
+                voteBtnContent = `
+                    <button type="submit" class="vote-btn" id='voteBtn'>Vote</button>
+                `
+
+                pollOptionsWrap.insertAdjacentHTML('beforeend', pollOptions)
+                pollQuestionWrap.insertAdjacentHTML('beforeend', pollHeader)
+                voteOptionsWrap.insertAdjacentHTML('beforeend', voteBtnContent)
+                
+                var voteBtn = document.getElementById('voteBtn')
+
+                if (pollDetail['canVote'] == true) {
+                    voteBtn.addEventListener('click', function(){
+                        console.log('clicked')
+                        var choiceId = document.querySelector("input[name=choice]:checked").value
+                        voteChoice(choiceId)
+                        disableVote()
+                    })
+
+                } else {
+                    document.getElementById(`opt${data['userChoiceId']}`).checked = true;
+                    disableVote()
+                }
+
+             
+            }
+
+            buildChart()
+
+            function voteChoice(choice){
+                fetch('http://127.0.0.1:8000/api/question-vote/', {
+                    method:'POST', 
+                    headers:{
+                        'Content-type':'application/json',
+                        'X-CSRFToken':csrftoken,
+                    },
+                    body:JSON.stringify({'choice':choice,})
+                }).then((response) => {
+                    console.log('voted')
+                })
+            }
+
+            function disableVote() {
+                var choices = document.getElementsByClassName('choices')
+                for (var i=0; i < choices.length; i++) {
+                    choices[i].disabled = true;
+                    voteBtn.innerText = 'Voted'
+                }
+            }
+
+            // chart 1
+            
+            function buildChart() {
+                var chartData = {
+                    'type':'bar',
+                    'backgroundColor':'none', // This is in the root
+                    'plotarea':{
+                        backgroundColor:'transparent'
+                    },
+                    'plot': {
+                        'value-box': {
+                        //Displays all data values by default.
+                        },
+                        backgroundColor: '#4b5a72',
+                    },
+                    'title': {
+                        // text: 'Results',
+                        fontSize: 18,
+                        fontColor: '#854125',
+                    },
+                    'scale-x':{
+                        'labels': data['choices_text'],
+                        'item': {
+                            "fontSize": 13,
+                            'font-color': '#854125',
+                            "mediaRules": [{
+                                "maxWidth": 400,
+                                "fontSize": 10,
+                                "angle": 45
+                            }],
+                        },
+                        // 'wrapText': true,
+                        // 'angle': -50,
+                    },
+                    'series':[
+                        {
+                            'values': data['votes_count'],
+                        }
+                    ],
+                    'scale-y':{
+                        values: "0:100:10",
+                        'item': {
+                            'font-color': '#854125',
+                        },
+
+                    },
+                }
+
+                zingchart.render({
+                    id:'myChart',
+                    data: chartData,
+                })
+
+            }
+
+            
+
+           
+
+            // var pollsList = data
+            // for (var i in pollsList) {
+                
+            //     var pollText = pollsList[i]['question_text']
+            //     var pollId = pollsList[i]['id']
+
+            //     var poll = `
+            //     <div class="poll-wrap">
+            //         <div class="poll-title">
+            //             ${pollText}
+            //         </div>
+            //         <div class="actions">
+            //             <button class='view-poll-btn'>View</button>    
+            //         </div>
+            //     </div>
+            //     `
+            //     listWrapper.insertAdjacentHTML('beforeend', poll)
+
+            //     var viewPollBtn = document.getElementsByClassName('view-poll-btn')
+
+            //     for (var i=0; i<viewPollBtn.length; i++) {
+            //         viewPollBtn[i].addEventListener('click', function(){
+            //             window.location.replace(`/question-detail/${pollId}/`);
+            //         })
+            //     };
+
+            // };
+
+        });
+    };
+
+
+</script>
+{% endblock content %}
+
