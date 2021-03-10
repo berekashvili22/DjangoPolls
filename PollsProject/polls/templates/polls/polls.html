@@ -3,45 +3,58 @@
 {% block content %}
 
 <div class="polls-list-wrap" id="listWrapper">
+    <div class="polls-list-title-wrap">
+        <h2 class="poll-list-title">Polls List</h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-bar-graph" viewBox="0 0 16 16">
+            <path d="M4.5 12a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1z"/>
+            <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+        </svg>
+    </div>
 </div>
 
 <script>
     getList()
 
     function getList() {
+        // get container to add polls
         var listWrapper = document.getElementById('listWrapper')
 
+        // send request to get polls data
         var url = 'http://127.0.0.1:8000/api/question-list/'
         fetch(url)
         .then((resp) => resp.json())
         .then(function(data) {
             console.log(data)
+            // pollData
             var pollsList = data
+            // add data to container
             for (var i in pollsList) {
                 
-                var pollText = pollsList[i]['question_text']
-                var pollId = pollsList[i]['id']
+                var poll = pollsList[i]
 
-                var poll = `
+                var pollText = poll['question_text']
+                var pollId = poll['id']
+                var pubDate = poll['pub_date']
+                
+                var pollData = `
                 <div class="poll-wrap">
                     <div class="poll-title">
                         ${pollText}
                     </div>
                     <div class="actions">
-                        <button class='view-poll-btn'>View</button>    
+                        <button class='view-poll-btn' data-id=${pollId}>View</button>
+                        <p class="poll-pub-date">${pubDate.substring(0, 10)}</p>
                     </div>
                 </div>
                 `
-                listWrapper.insertAdjacentHTML('beforeend', poll)
-
+                listWrapper.insertAdjacentHTML('beforeend', pollData)
                 var viewPollBtn = document.getElementsByClassName('view-poll-btn')
-
-                for (var i=0; i<viewPollBtn.length; i++) {
-                    viewPollBtn[i].addEventListener('click', function(){
-                        window.location.replace(`/poll/${pollId}/`);
-                    })
-                };
-
+                
+                // add event listener to each view button for detail view redirection
+                viewPollBtn[i].addEventListener('click', function(){
+                    var id = this.dataset.id
+                    window.location.replace(`/poll/${id}/`)
+                })
             };
 
         });
