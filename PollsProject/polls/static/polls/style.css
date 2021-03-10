@@ -305,6 +305,19 @@ body {
     outline: none;
 }
 
+/* errors msg */
+.poll-error-message-wrap {
+    width: 85%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.error-message {
+    font-size: 14px;
+    color: red;
+}
 /* poll */
 
 .poll-chart-wrap {
