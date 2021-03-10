@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'polls.apps.PollsConfig',
     'rest_framework',
     'crispy_forms',
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -110,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tbilisi'
 
 USE_I18N = True
 
@@ -126,3 +127,14 @@ STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'home'
+
+# Configure your Q cluster
+# More details https://django-q.readthedocs.io/en/latest/configure.html
+Q_CLUSTER = {
+    "name": "PollsProject",
+    "orm": "default",  # Use Django's ORM + database for broker
+    'timeout': 1,
+    'retry': 2,
+    'queue_limit': 5,
+    "gevent": True,
+}
