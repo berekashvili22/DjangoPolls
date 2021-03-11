@@ -3,7 +3,6 @@ from django.utils import timezone
 import datetime
 from . models import Question
 
-# print(timezone.localtime(timezone.now()))
 
 
 class QuestionModelTest(TestCase):
