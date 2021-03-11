@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.utils import timezone
+
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
@@ -18,17 +20,27 @@ def apiOverview(request):
     }
     return Response(api_urls)
 
+@api_view(['GET'])
+def questionOfTheDay(reqeust):
+    now = timezone.localtime(timezone.now())
+    question = Question.objects.filter(pub_date__lte=now).order_by('-id').first()
+    serializer = QuestionSerializer(question, many=False)
+    return Response(serializer.data)
+
 
 @api_view(['GET'])
 def questionList(request):
-    questions = Question.objects.all()
-    serializer = QuestionSerializer(questions, many=True)
+    questions = Question.objects.all().order_by('-pub_date')
+    filtered_questions = [x for x in questions if x.was_bulished_in_present]
+    serializer = QuestionSerializer(filtered_questions, many=True)
+
     return Response(serializer.data)
 
 @api_view(['GET'])
 def questionDetail(request, pk):
     # get question and question choices
     question = Question.objects.get(pk=pk)
+
     choices = Choice.objects.filter(question=question)
 
     # serialize data
