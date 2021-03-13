@@ -1,0 +1,45 @@
+{% extends 'polls/main.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<div class="home-wrap">
+    <div class="daily-question-header-wrap">
+        <h2 class="daily-question-header">Question of the day</h2>
+    </div>
+    <div class="daily-question-details-wrap">
+        <p class="daily-question-title"></p>
+        <button class="daily-q-vote-btn">Vote now</button>
+    </div>
+    
+    <div class="home-svg-wrap">
+        <img src="{% static 'polls/images/home.svg' %}" class="home-svg" alt="poll details">
+    </div>
+</div>
+
+<script>
+    getList()
+
+function getList() {
+    // get container to add polls
+    var listWrapper = document.getElementById('listWrapper')
+
+    // send request to get polls data
+    var url = 'http://127.0.0.1:8000/api/question-daily/'
+    fetch(url)
+    .then((resp) => resp.json())
+    .then(function(data) {
+        console.log(data)
+        var title = document.querySelector('.daily-question-title')
+        var btn = document.querySelector('.daily-q-vote-btn')
+        var id = data['id']
+        title.textContent = data['question_text']
+        btn.addEventListener('click', function() {
+            window.location.replace(`/poll/${id}/`)
+        })
+    });
+};
+
+</script>
+
+{% endblock content %}
