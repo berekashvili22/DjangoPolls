@@ -15,11 +15,14 @@
     <!-- google fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1&display=swap" rel="stylesheet">
 
 </head>
 <body>
     <nav class="navbar">
-      <div class="logo-wrap"><h2 class="logo">DailyPolls</h2></div>
+      <div class="logo-wrap"><a href="{% url 'home' %}" class="logo">DailyPolls</a></div>
       <div class="navigation-wrap">
         <ul class="nav-links-ul">
           <li class="nav-li"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
@@ -45,6 +48,19 @@
     </nav>
     {% block content %}
     {% endblock content %}
+
+    <footer class="footer">
+      <div class="footer-img-wrap">
+        <img class="footer-img" src="{% static 'polls/images/facebook.PNG' %}" class="home-svg" alt="poll details">
+        <img class="footer-img" src="{% static 'polls/images/twitter.PNG' %}" class="home-svg" alt="poll details">
+        <img class="footer-img" src="{% static 'polls/images/instagram.PNG' %}" class="home-svg" alt="poll details">
+      </div>
+      <div class="copyright">
+        <p>&#169; Tornike Berekashvili</p>
+      </div>
+    </footer>
+
+
     <script src="{% static 'polls/navbar.js' %}"></script>
 </body>
 </html>
