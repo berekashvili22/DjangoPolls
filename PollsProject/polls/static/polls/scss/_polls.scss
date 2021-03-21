@@ -1,0 +1,54 @@
+.polls-list-wrap {
+    width: 100%;
+    background-color: $secondary-bg-color;
+
+    .polls-list-header {
+        width: 800px;
+        padding-top: 100px;
+        margin: 0 auto;
+        background-color: $secondary-bg-color;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        position: relative;
+        height: 200px;
+
+        &__title {
+             @include primaryTitle(mega)
+        }
+
+        &__text {
+            padding-top: 5px;
+            @include mutedText(xm);
+        }
+
+        &__dropdown {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(+25px);
+            border: none;
+            background-color: #f1f1f1;
+            height: 45px;
+            width: 120px;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: size(m);
+            font-weight: weight(bold);
+            outline: none;
+            cursor: pointer;
+
+
+            & option {
+                color: $primary-color;
+                font-weight: weight(bold);
+                background-color: $background-color;
+            }
+        }
+    }
+
+    .polls-list {
+        margin: 0 auto;
+        width: 800px;
+    }
+}
