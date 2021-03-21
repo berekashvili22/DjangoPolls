@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,IAAI,CAAC;EACD,gBAAgB,EAAE,GAAG;EACrB,UAAU,EAAE,UAAU;CACzB",
+    "sources": [
+        "../PollsProject/polls/static/polls/scss/main.scss"
+    ],
+    "names": [],
+    "file": "main.css"
+}
