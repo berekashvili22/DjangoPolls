@@ -1,0 +1,108 @@
+// navbar
+.navbar {
+    height: 10vh;
+    z-index: 10px;
+    padding: 27px 40px;
+    @include flex(space-between, row);
+    width: 100%;
+
+    &__logo-wrap {
+        // logo wrap
+        .logo {
+            font-size: size(xxl);
+            font-weight: weight(bold);            
+            color: $primary-color;
+            font-family: $bold-font-family;
+
+            &__span {
+                padding-left: 5px;
+                color: $green;
+            }
+
+            #logo_icon {
+                padding-right: 2px;
+                color: $primary-color;
+            }
+        }
+    }
+
+    .navlinks {
+        width: 400px;
+
+        &__ul {
+            width: 100%;
+            @include flex(space-between, row);
+        }
+
+        &__li {
+        }
+
+        &__link {
+            font-size: size(m);
+            color: $seconday-color;
+            font-weight: weight(bold);
+            @include transition-ease();
+            @include flex(flex-start, row)
+        
+
+            &:hover {
+                color: $primary-color;
+            }
+
+            .about_span {
+                background-color: $orange-red;
+                color: $background-color;
+                font-weight: weight(bold);
+                font-size: size(xs);
+                letter-spacing: 2px;
+                border-radius: 4px;
+                margin-left: 3px;
+                margin-top: 2px;
+                width: 30px;
+                height: 15px;
+                @include flex(center, row)
+            }
+        }
+    }
+
+    .authlinks {
+        width: 200px;
+
+        &__ul {
+            width: 100%;
+            @include flex(space-between, row);
+
+            #singUp {
+                background-color: $blue;
+                @include transition-ease()
+
+                &:hover {
+                    background-color: $dark-blue
+                }
+
+                a {
+                    color: $background-color;
+                }
+            } 
+        }
+
+        &__li {
+            border-radius: 5px;
+            width: 100px;
+            height: 50px;
+            cursor: pointer;
+            @include flex(center, row)
+        }
+
+        &__link {
+            font-size: size(m);
+            color: $seconday-color;
+            font-weight: weight(bold);
+            @include transition-ease();
+
+            &:hover {
+                color: $primary-color;
+            }
+        }
+    }
+}
