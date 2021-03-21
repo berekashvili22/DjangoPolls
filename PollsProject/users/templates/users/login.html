@@ -2,22 +2,36 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
-    <div class="container mt-5 p-4 border" id="">
+
+<div class="auth-wrap">
+    <div class="form-wrap" id="formWrap">
+
+        <header class="form-wrap__header">
+            <h1>Login</h1>
+            <p>Securely login to your account</p>
+        </header>
+
         <form action="" method="POST">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="mb-2" style="font-weight: bold;">DailyPoll</legend>
-                <h6>Log In</h6>
-                <hr>
-                {{ form|crispy }}
-                <div class="form-group">
-                    <button class="btn btn-primary">Log In</button>
-                </div>
-            </fieldset>
+            <div class="session-input-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email">
+            </div>
+            <div class="session-input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <div class="session-input-group">
+                <button type="submit" title="Login">Login</button>
+            </div>
+            <div class="form-recover-section">
+                <small class="text-muted">Forgot Password ?</small> <a href="#">Recover now</a>
+            </div>
         </form>
-        <hr>
-        <div class="pt-2">
-            <small class="text-muted mr-2">Need An Account ?</small> <a href="{% url 'register' %}">Sing Up</a>
-        </div>
+
     </div>
+
+    <div class="auth-wrap__shape">
+    </div>
+</div>
 {% endblock content %}
