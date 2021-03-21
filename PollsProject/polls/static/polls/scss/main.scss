@@ -1,0 +1,17 @@
+@import './reset';
+@import './variables';
+@import './nav';
+@import './home';
+@import './poll';
+@import './polls';
+@import './auth';
+
+body {
+    font-family: $primary-font-family;
+    background-color: $background-color;
+}
+
+.main-container {
+    height: 90vh;
+    width: 100%;
+}
