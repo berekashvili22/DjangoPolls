@@ -2,13 +2,21 @@
 {% load static %}
 {% block content %}
 
-<div class="polls-list-wrap" id="listWrapper">
-    <div class="polls-list-title-wrap">
-        <h2 class="poll-list-title">Polls List</h2>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-bar-graph" viewBox="0 0 16 16">
-            <path d="M4.5 12a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1z"/>
-            <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
-        </svg>
+<div class="polls-list-wrap">
+    <!-- <div style="margin-bottom: 50px;">.</div> -->
+    <div class="polls-list-header">
+        <div class="polls-list-header__title">Polls Archive</div>
+        <div class="polls-list-header__text">below are the polls that already expired</div>
+
+        <select class="polls-list-header__dropdown"  name="polls-filter" id="polls-filter">
+            <option value="recent">Recent</option>
+            <option value="popular">Pupular</option>
+            <option value="oldest">Oldest</option>
+        </select>
+
+    </div>
+    <div class="polls-list" id="listWrapper">
+       
     </div>
 </div>
 
@@ -37,18 +45,18 @@
                 var pubDate = poll['pub_date']
                 
                 var pollData = `
-                <div class="poll-wrap">
-                    <div class="poll-title">
+                <a class="question-details" href="#" data-id=${pollId}>
+                    <h2 class="question-details__title">
                         ${pollText}
-                    </div>
-                    <div class="actions">
-                        <button class='view-poll-btn' data-id=${pollId}>View</button>
-                        <p class="poll-pub-date">${pubDate.substring(0, 10)}</p>
-                    </div>
-                </div>
+                    </h2>
+                    <p class="question-details__date-added">${pubDate.substring(0, 10)}</p>
+                    <span class="question-details__vote-counts">
+                        <span id="voteCount">0</span> Votes
+                    </span>
+                </a>
                 `
                 listWrapper.insertAdjacentHTML('beforeend', pollData)
-                var viewPollBtn = document.getElementsByClassName('view-poll-btn')
+                var viewPollBtn = document.getElementsByClassName('question-details')
                 
                 // add event listener to each view button for detail view redirection
                 viewPollBtn[i].addEventListener('click', function(){
