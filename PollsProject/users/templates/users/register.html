@@ -2,22 +2,62 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
-    <div class="container mt-3 p-4 border" id="register-container">
+    
+<div class="auth-wrap">
+    <div class="form-wrap register" id="formWrap">
+
+        <header class="form-wrap__header">
+            <h1>Sing Up</h1>
+            <p>Complete the below form to create your account</p>
+        </header>
+
         <form action="" method="POST">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="mb-2" style="font-weight: bold;">DailyPoll</legend>
-                <h6>Register</h6>
-                <hr>
-                {{ form|crispy }}
-                <div class="form-group">
-                    <button class="btn btn-primary">Sing up</button>
+            
+            <div class="session-input-group split">
+                <div class="split__wrap">
+                    <label for="first-name">First Name</label>
+                    <input type="text" id="first-name" name="first-name">
                 </div>
-            </fieldset>
+                <div class="split__wrap">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" id="last-name" name="last-name">
+                </div>
+            </div>
+
+            <div class="session-input-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email">
+            </div>
+
+            <div class="session-input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username">
+            </div>
+
+            <div class="session-input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
+
+            <div class="session-input-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password">
+            </div>
+
+            <div class="session-input-group">
+                <button type="submit" title="Login">Login</button>
+            </div>
+            <div class="form-recover-section">
+                <small class="">Already have an account ?</small> <a href="{% url 'login' %}">Login</a>
+            </div>
         </form>
-        <hr>
-        <div class="pt-2">
-            <small class="text-muted mr-2">Already Have An Account ?</small> <a href="{% url 'login' %}">Sing In</a>
-        </div>
+
     </div>
+
+    <div class="auth-wrap__shape">
+    </div>
+</div>
+
 {% endblock content %}
+
