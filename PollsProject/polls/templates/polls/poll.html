@@ -1,0 +1,61 @@
+{% extends 'polls/main.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+
+<section class="daily-question-wrap">
+    <div class="daily-question">
+        <h1 class="daily-question__title">
+            Question of the day
+        </h1>
+        <p class="daily-question__muted">Express your opinion now</p>
+        <a class="question-details" href="#" id="dailyLink">
+            <h2 class="question-details__title" id="dailyTitle">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eligendi ab temporibus earum est expedita explicabo?
+            </h2>
+            <p class="question-details__date-added">Created <span id="dailyDate">2</span> hours ago</p>
+            <span class="question-details__vote-counts">
+                <span id="voteCount">0</span> Votes
+            </span>
+        </a>
+    </div>
+    <div class="daily-question-wrap__shape shape">
+    </div>
+    <img src="{% static 'polls/images/question.svg' %}" alt="question" class="daily-question-wrap__image">
+</section>
+
+
+
+
+
+<script>
+    getList()
+
+function getList() {
+    // send request to get polls data
+    var url = 'http://127.0.0.1:8000/api/question-daily/'
+    fetch(url)
+    .then((resp) => resp.json())
+    .then(function(data) {
+        // console.log(data)
+        
+        document.getElementById('dailyTitle').textContent = data['question']['question_text']
+        document.getElementById('voteCount').textContent = data['votesCount']
+
+        var btn = document.getElementById('dailyLink')
+        var id = data['question']['id']
+        
+        var dataAdded = document.getElementById('dailyDate')
+
+        
+
+        btn.addEventListener('click', function() {
+            window.location.replace(`/poll/${id}/`)
+        })
+    });
+};
+
+</script>
+
+{% endblock content %}
