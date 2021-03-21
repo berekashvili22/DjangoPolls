@@ -25,12 +25,20 @@ def questionOfTheDay(reqeust):
     now = timezone.localtime(timezone.now())
     question = Question.objects.filter(pub_date__lte=now).order_by('-id').first()
     serializer = QuestionSerializer(question, many=False)
-    return Response(serializer.data)
+    # get votes count
+    choices = Choice.objects.filter(question=question)
+    votesCount = Vote.objects.filter(choice__in=choices).count()
+
+    data = {
+        'question': serializer.data,
+        'votesCount': votesCount,
+    }
+    return Response(data)
 
 
 @api_view(['GET'])
 def questionList(request):
-    questions = Question.objects.all().order_by('-pub_date')
+    questions = Question.objects.filter(completed=True).order_by('-pub_date')
     filtered_questions = [x for x in questions if x.was_bulished_in_present]
     serializer = QuestionSerializer(filtered_questions, many=True)
 
