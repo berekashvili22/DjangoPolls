@@ -1,0 +1,47 @@
+
+.home-header {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 auto;
+    width: 1000px;
+    @include flex(center, column);
+
+    &__title {
+        font-size: size(giant);
+        text-align: center;
+        // font-weight: weight(bold);
+
+        .opinion-span {
+            animation: color-change 3s infinite alternate;
+        }
+    }
+
+    &__button {
+        @include flex(center, row);
+        width: 270px;
+        height: 65px;
+        margin: 40px 0px;
+        color: $background-color;
+        border-radius: 5px;
+        font-size: size(xl);
+        font-weight: weight(bold);
+        background-color: $green;
+        @include transition-ease
+
+        &:hover {
+            background-color: $dark-green;
+        }
+    }
+
+    &__text {
+        color: $muted;
+        font-size: size(s);
+    }
+}
+
+@keyframes color-change {
+    0% { color: $red; }
+    50% { color: $blue; }
+    100% { color: $green; }
+  }
