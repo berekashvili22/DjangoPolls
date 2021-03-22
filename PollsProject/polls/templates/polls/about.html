@@ -1,0 +1,45 @@
+{% extends 'polls/main.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+
+<section class="about-wrap">
+    <div class="about-wrap__title">About Us</div>
+    <div class="about-wrap__sub-title">Improving the way online voting is done</div>
+    <div class="about-wrap__image-wrap">
+        <img src="{% static 'polls/images/about.svg' %}" alt="team" class="about-img">
+    </div>
+    <div class="about-wrap__about-counts">
+        <div class="about-count">
+            <div class="about-count__title">
+                <p>More than</p>
+            </div>
+            <div class="about-count__number">
+                <p>100,000</p>
+            </div>
+            <div class="about-count__sub-title">
+                <p>Votes cast to date</p>
+            </div>
+        </div>
+        <div class="about-count">
+            <div class="about-count__title">
+                <p>More than</p>
+            </div>
+            <div class="about-count__number">
+                <p>5K</p>
+            </div>
+            <div class="about-count__sub-title">
+                <p>Polls created to date</p>
+            </div>
+        </div>
+    </div>
+    <div class="about-wrap__txt-block">
+        <h2 class="about-wrap__txt-block--title">About</h2>
+        <div class="about-wrap__txt-block--txt">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste, exercitationem provident nam consequuntur ex corporis laborum facilis, numquam ratione dignissimos quidem doloremque perspiciatis, qui nesciunt esse officia nihil. Adipisci quis sit quas, voluptas eaque numquam facilis necessitatibus vitae neque explicabo culpa dolore natus doloribus sapiente impedit accusamus facere, aperiam deleniti corporis voluptatum ipsam commodi sequi, itaque nihil! Provident quam dolores, et ad fuga sunt adipisci odit doloribus inventore amet aperiam culpa earum excepturi recusandae animi at, autem labore a debitis qui minus id optio illum enim. Quidem fugit facere obcaecati adipisci consequatur dicta exercitationem expedita voluptate voluptates temporibus possimus, reprehenderit ab enim libero consequuntur vel voluptatum eveniet, deserunt dignissimos perspiciatis? Atque ducimus officiis nesciunt, quasi est, accusamus ipsam omnis beatae fugit inventore quis molestias soluta dolorem eligendi sit, hic architecto sequi dolore animi aspernatur. Facilis, voluptates. Tempore voluptates, nostrum sequi incidunt reiciendis quae ea illum laboriosam explicabo quod nihil pariatur.</div>
+    </div>
+
+</section>
+
+
+{% endblock content %}
