@@ -4,6 +4,9 @@ from django.shortcuts import render
 def home(request):
     return render(request, 'polls/home.html')
 
+def about(request):
+    return render(request, 'polls/about.html')
+
 def poll(reqeust):
     return render(reqeust, 'polls/poll.html')
 
