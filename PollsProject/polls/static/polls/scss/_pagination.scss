@@ -1,0 +1,40 @@
+.pagination-wrap {
+    position: relative;
+    display: flex;
+    width: 800px;
+    height: 100px;
+    margin: 50px auto 0px auto;
+
+    &__btn {
+        position: absolute;
+        height: 50px;
+        width: 90px;
+        background-color: $background-color;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.14);
+        color: $primary-color;
+        font-weight: bold;
+        font-size: size(xm);
+        @include transition-ease;
+
+        &:hover {
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
+        }
+    }
+
+    #next {
+        left: 13%;
+    }
+
+    #previous {
+        left: 0%;
+    }
+
+    & .disabled {
+        cursor: not-allowed;
+        color: $seconday-color;
+
+        &:hover {
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.14);
+        }
+    }
+}
