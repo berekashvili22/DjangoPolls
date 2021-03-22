@@ -1,8 +1,8 @@
 {% extends 'polls/main.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load humanize %}
 {% block content %}
-
 
 <section class="daily-question-wrap">
     <div class="daily-question">
@@ -11,12 +11,10 @@
         </h1>
         <p class="daily-question__muted">Express your opinion now</p>
         <a class="question-details" href="#" id="dailyLink">
-            <h2 class="question-details__title" id="dailyTitle">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eligendi ab temporibus earum est expedita explicabo?
-            </h2>
-            <p class="question-details__date-added">Created <span id="dailyDate">2</span> hours ago</p>
+            <h2 class="question-details__title" id="dailyTitle"></h2>
+            <p class="question-details__date-added"><span id="dailyDate"></span></p>
             <span class="question-details__vote-counts">
-                <span id="voteCount">0</span> Votes
+                <span id="voteCount"></span> Votes
             </span>
         </a>
     </div>
@@ -24,10 +22,6 @@
     </div>
     <img src="{% static 'polls/images/question.svg' %}" alt="question" class="daily-question-wrap__image">
 </section>
-
-
-
-
 
 <script>
     getList()
@@ -38,21 +32,20 @@ function getList() {
     fetch(url)
     .then((resp) => resp.json())
     .then(function(data) {
-        // console.log(data)
         
+        // fill html with api data
         document.getElementById('dailyTitle').textContent = data['question']['question_text']
+        document.getElementById('dailyDate').textContent = data['question']['pub_date']
         document.getElementById('voteCount').textContent = data['votesCount']
 
+        // add event listener to question wrap for url redirection
         var btn = document.getElementById('dailyLink')
         var id = data['question']['id']
         
-        var dataAdded = document.getElementById('dailyDate')
-
-        
-
         btn.addEventListener('click', function() {
             window.location.replace(`/poll/${id}/`)
         })
+
     });
 };
 
