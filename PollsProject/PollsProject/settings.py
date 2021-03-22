@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'crispy_forms',
     'django_q',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -137,4 +138,9 @@ Q_CLUSTER = {
     'retry': 2,
     'queue_limit': 5,
     "gevent": True,
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
 }
