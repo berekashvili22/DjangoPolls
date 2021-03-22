@@ -6,9 +6,14 @@ from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.generics import ListAPIView
+
 from . models import Question, Choice, Vote
 from . serializers import QuestionSerializer, ChoiceSerializer, VoteSerializer
 from django.shortcuts import get_object_or_404
+
+from . utils import getVoteCount, getVotesCount
 
 
 @api_view(['GET'])
@@ -17,32 +22,35 @@ def apiOverview(request):
         'Question List':'question-list',
         'Question Detail View':'question-detail/<str:pk>/',
         'Create Vote':'question-vote/',
+        'Daily Question':'question-daily/',
     }
     return Response(api_urls)
 
 @api_view(['GET'])
 def questionOfTheDay(reqeust):
+
     now = timezone.localtime(timezone.now())
     question = Question.objects.filter(pub_date__lte=now).order_by('-id').first()
     serializer = QuestionSerializer(question, many=False)
-    # get votes count
-    choices = Choice.objects.filter(question=question)
-    votesCount = Vote.objects.filter(choice__in=choices).count()
 
     data = {
         'question': serializer.data,
-        'votesCount': votesCount,
+        'votesCount': getVoteCount(question),
     }
     return Response(data)
 
-
-@api_view(['GET'])
-def questionList(request):
+class questionList(ListAPIView):
     questions = Question.objects.filter(completed=True).order_by('-pub_date')
     filtered_questions = [x for x in questions if x.was_bulished_in_present]
-    serializer = QuestionSerializer(filtered_questions, many=True)
 
-    return Response(serializer.data)
+    queryset = filtered_questions
+    serializer_class = QuestionSerializer
+    pagination_class = PageNumberPagination
+    
+    def list(self, request, *args, **kwargs):
+        response = super(questionList, self).list(request, args, kwargs)
+        response.data[ 'votesCount' ] = getVotesCount(self.filtered_questions)
+        return response
 
 @api_view(['GET'])
 def questionDetail(request, pk):
