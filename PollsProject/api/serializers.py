@@ -2,11 +2,12 @@
 from rest_framework import serializers
 from . models import Question, Choice, Vote
 
-
 class QuestionSerializer(serializers.ModelSerializer):
+    pub_date = serializers.ReadOnlyField(source='FORMAT')
     class Meta:
         model = Question
         fields = '__all__'
+
 
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,6 +24,7 @@ class VoteSerializer(serializers.ModelSerializer):
     def save(self):
         user = self.context['request'].user
         choice = self.validated_data['choice']
+    
 
         vote = Vote.objects.create(
             user=user,
