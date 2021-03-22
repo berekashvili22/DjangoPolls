@@ -3,38 +3,41 @@
 {% block content %}
 
 <div class="polls-list-wrap">
-    <!-- <div style="margin-bottom: 50px;">.</div> -->
     <div class="polls-list-header">
         <div class="polls-list-header__title">Polls Archive</div>
         <div class="polls-list-header__text">below are the polls that already expired</div>
 
         <select class="polls-list-header__dropdown"  name="polls-filter" id="polls-filter">
-            <option value="recent">Recent</option>
-            <option value="popular">Pupular</option>
-            <option value="oldest">Oldest</option>
+            <option class="filterOption" id="RecentFilter" value="recent">Recent</option>
+            <option class="filterOption" id="OldestFilter" value="oldest">Oldest</option>
         </select>
 
     </div>
-    <div class="polls-list" id="listWrapper">
-       
-    </div>
+
+    <div class="polls-list" id="listWrapper"></div>
+    <div class="pagination-wrap" id="paginationWrap"></div>
+    
 </div>
 
+
 <script>
+    
     getList()
 
-    function getList() {
-        // get container to add polls
+    function getList(apiUrl = 'http://127.0.0.1:8000/api/question-list/') { /* set default url to first page of api listdata */
+        // get main poll wrapper to add data later
         var listWrapper = document.getElementById('listWrapper')
-
-        // send request to get polls data
-        var url = 'http://127.0.0.1:8000/api/question-list/'
+        // define url based on passed parameter
+        var url = apiUrl
+        
+        // make api call
         fetch(url)
         .then((resp) => resp.json())
         .then(function(data) {
-            console.log(data)
-            // pollData
-            var pollsList = data
+            // POLL DATA
+            var pollsList = data['results']
+            var votesCounts = data['votesCount']
+
             // add data to container
             for (var i in pollsList) {
                 
@@ -42,33 +45,88 @@
 
                 var pollText = poll['question_text']
                 var pollId = poll['id']
-                var pubDate = poll['pub_date']
+                var pollPubDate = poll['pub_date']
+
+                var pollVoteCount = votesCounts[pollId]
                 
                 var pollData = `
                 <a class="question-details" href="#" data-id=${pollId}>
                     <h2 class="question-details__title">
                         ${pollText}
                     </h2>
-                    <p class="question-details__date-added">${pubDate.substring(0, 10)}</p>
+                    <p class="question-details__date-added">${pollPubDate}</p>
                     <span class="question-details__vote-counts">
-                        <span id="voteCount">0</span> Votes
+                        <span id="voteCount">${pollVoteCount}</span> Votes
                     </span>
                 </a>
                 `
+
                 listWrapper.insertAdjacentHTML('beforeend', pollData)
-                var viewPollBtn = document.getElementsByClassName('question-details')
-                
-                // add event listener to each view button for detail view redirection
-                viewPollBtn[i].addEventListener('click', function(){
+
+                // add eventlistener to poll wrappers
+                var pollWrapperLink = document.getElementsByClassName('question-details')
+
+                pollWrapperLink[i].addEventListener('click', function(){
                     var id = this.dataset.id
                     window.location.replace(`/poll/${id}/`)
                 })
+
             };
+            // PAGINATION
+            
+            // get pagination wrap
+            var paginationWrap = document.getElementById('paginationWrap')
+
+            // create navigation btns
+            var paginationBtns = `
+            <button class="pagination-wrap__btn" id='previous'>
+                Previous
+            </button>
+            <button class="pagination-wrap__btn" id='next'>
+                Next
+            </button>
+            `
+            // add navigation btns to pagination wrap
+            paginationWrap.insertAdjacentHTML('beforeend', paginationBtns)
+            
+            // get navigation btns
+            nextBtn = document.getElementById('next')
+            previousBtn = document.getElementById('previous')
+
+            // if any of btn's value is equal to null disable it
+            
+            if (data['previous'] == null) {
+                previousBtn.disabled = true
+                previousBtn.classList.add('disabled')
+            }
+
+            if (data['next'] == null) {
+                nextBtn.disabled = true
+                nextBtn.classList.add('disabled')
+            }
+
+            // add eventlistener to navigation btns
+
+            document.getElementById('next').addEventListener('click', function(){
+                // clean old data
+                document.getElementById('paginationWrap').innerHTML = ''
+                listWrapper.innerHTML = ''
+                // fetch to next url
+                getList(data['next']) /* this comes from drf pagination */
+            });
+
+            // same here
+            document.getElementById('previous').addEventListener('click', function(){
+                document.getElementById('paginationWrap').innerHTML = ''
+                listWrapper.innerHTML = ''
+                getList(data['previous'])
+            });
 
         });
     };
 
+    
 
 </script>
-{% endblock content %}
 
+{% endblock content %}
