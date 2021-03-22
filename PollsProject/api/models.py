@@ -2,13 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 import datetime
-
+from django.utils.timesince import timesince
 
 
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     completed = models.BooleanField(default=False)
     pub_date = models.DateTimeField('date published')
+
+    def FORMAT(self):
+        return f'Created {timesince(self.pub_date)} ago'
 
     def __str__(self):
         return self.question_text
