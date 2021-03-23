@@ -8,15 +8,44 @@
     <div class="poll-error-message-wrap">
         <p class="error-message" id="errorMsg"></p>
     </div>
+    <div class="chart-wrap">
+        <canvas id="myChart"></canvas>
+    </div>
+    <div class="poll-detail-wrap__sidebar">
+        <div class="vote-counts">
+            <p class="vote-counts__title">Votes</p>
+            <p class="vote-counts__count">5</p>
+        </div>
+        <div class="share-social">
+            <h3>Share</h3>
+            <div class="social-link-wrap">
+                <i class="fab fa-twitter fa-lg" style="color: #00aaec;"></i>
+                <p style="color: #00aaec;">Share on Twitter</p>
+            </div>
+            <div class="social-link-wrap">
+                <i class="fab fa-facebook fa-lg" style="color:#4460a0;"></i>
+                <p style="color:#4460a0;">Share on Facebook</p>
+            </div>
+            <div class="social-link-wrap">
+                <i class="fab fa-whatsapp fa-lg" style="color: #25d366;"></i>
+                <p style="color: #25d366;">Share on WhatsApp</p>
+            </div>
+            <div class="social-link-wrap">
+                <i class="fas fa-link fa-lg" style="color:#ffa983;"></i>
+                <p style="color:#ffa983;">Share Link</p>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="chart-wrap">
-    <div id="myChart" class="poll-chart-wrap"></div>
-</div>
+
+
+<p class="hi" style="padding-top: 150px">.</p>
 
 <!-- wrapper for chart -->
 
-<!-- import zingchart -->
-<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+<!-- zing chart cdn -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
 
 <script type="text/javascript">
     
@@ -188,8 +217,6 @@
         }
         
         // build chart
-        buildChart()
-        
         
         // function to create vote
         function voteChoice(choice){
@@ -214,63 +241,76 @@
             }
         }
 
-        // function to build chart
-        function buildChart() {
-            var chartData = {
-                'type':'bar',
-                'backgroundColor':'none', // This is in the root
-                'plotarea':{
-                    backgroundColor:'transparent'
-                },
-                'plot': {
-                    'value-box': {
-                    //Displays all data values by default.
-                    },
-                    backgroundColor: '#4b5a72',
-                },
-                'title': {
-                    text: 'Results',
-                    fontSize: 18,
-                    fontColor: '#854125',
-                },
-                'scale-x':{
-                    'labels': data['choices_text'],
-                    'item': {
-                        "fontSize": 13,
-                        'font-color': '#854125',
-                        "mediaRules": [{
-                            "maxWidth": 400,
-                            "fontSize": 10,
-                            "angle": 45
-                        }],
-                    },
-                    // 'wrapText': true,
-                    // 'angle': -50,
-                },
-                'series':[
-                    {
-                        'values': data['votes_count'],
-                    }
-                ],
-                'scale-y':{
-                    values: "0:100:10",
-                    'item': {
-                        'font-color': '#854125',
-                    },
 
+
+
+        var ctx = document.getElementById('myChart');
+        var myChart = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: {
+                labels: data['choices_text'],
+                datasets: [{
+
+                    label: 'Votes',
+                    data: data['votes_count'],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                legend:{display: false,},
+                scalegs: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            // display:false
+                        },
+                        ticks: {
+                            min: 0, // it is for ignoring negative step.
+                            beginAtZero: true,
+                            callback: function(value, index, values) {
+                                if (Math.floor(value) === value) {
+                                    return value;
+                                }
+                        },
+}
+                    }],
+                    yAxes: [{
+                        gridLines: {
+                            display:false
+                        },
+                    }]
                 },
             }
+        });
 
-            zingchart.render({
-                id:'myChart',
-                data: chartData,
-            })
-
-        }
-
+        console.log(data['votes_count'].length)
     });
+
 };
 
 
 </script>
+
 {% endblock content %}
