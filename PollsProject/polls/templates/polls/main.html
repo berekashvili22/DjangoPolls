@@ -51,7 +51,7 @@
           <li class="authlinks__li">
             <a class="authlinks__link" href="#">{{ user.username }}</a>
           </li>
-          <li class="authlinks__li">
+          <li class="authlinks__li" id="logOut">
             <a class="authlinks__link" href="{% url 'logout' %}">Logout</a>
           </li>
           {% else %}
@@ -66,8 +66,12 @@
     </div>
    
   </div>
-
     <div class="main-container">
+      {% for message in messages %}
+        <div class="messages-wrap {{ message.tags }}" id="messagesWrap">
+          <p>{{ message }}</p>
+        </div>
+      {% endfor %}
       {% block content %}
       {% endblock content %}
     </div>
