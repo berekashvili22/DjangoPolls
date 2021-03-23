@@ -13,36 +13,41 @@
 
         <form action="" method="POST">
             {% csrf_token %}
-            
             <div class="session-input-group split">
                 <div class="split__wrap">
-                    <label for="first-name">First Name</label>
-                    <input type="text" id="first-name" name="first-name">
+                    <label for="first_name">First Name</label>
+                    {{ form.first_name }}
+                    {{ form.first_name.errors }}
                 </div>
                 <div class="split__wrap">
-                    <label for="last-name">Last Name</label>
-                    <input type="text" id="last-name" name="last-name">
+                    <label for="last_name">Last Name</label>
+                    {{ form.last_name }}
+                    {{ form.last_name.errors }}
                 </div>
             </div>
 
             <div class="session-input-group">
                 <label for="email">Email</label>
-                <input type="text" id="email" name="email">
+                {{ form.email }}
+                {{ form.email.errors }}
             </div>
 
             <div class="session-input-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username">
+                {{ form.username }}
+                {{ form.username.errors }}
             </div>
 
             <div class="session-input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password">
+                <label for="password1">Password</label>
+                {{ form.password1 }}
+                {{ form.password1.errors }}
             </div>
 
             <div class="session-input-group">
-                <label for="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirm-password">
+                <label for="password2">Confirm Password</label>
+                {{ form.password2 }}
+                {{ form.password2.errors }}
             </div>
 
             <div class="session-input-group">
