@@ -1,19 +1,19 @@
 {% extends 'polls/main.html' %}
 {% load static %}
 {% block content %}
-
-<!-- wrapper for poll details -->
 <div class="poll-detail-wrap" data-id={{ pk }} id="pollDetailWrap">
-    <div class="poll-detail-question-wrap" id="pollQuestionWrap"></div>
-    <div class="poll-options-wrap" id="pollOptionsWrap"></div>
-    <div class="vote-btns-wrap" id="voteOptionsWrap"></div>
+    <div class="poll-detail-wrap__header" id="pollQuestionWrap"></div>
+    <div class="poll-detail-wrap__options-wrap" id="pollOptionsWrap"></div>
+    <div class="poll-detail-wrap__vote-btn-wrap" id="voteOptionsWrap"></div>
     <div class="poll-error-message-wrap">
         <p class="error-message" id="errorMsg"></p>
     </div>
 </div>
+<div class="chart-wrap">
+    <div id="myChart" class="poll-chart-wrap"></div>
+</div>
 
 <!-- wrapper for chart -->
-<div id="myChart" class="poll-chart-wrap"></div>
 
 <!-- import zingchart -->
 <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
@@ -58,7 +58,7 @@
         .then((resp) => resp.json())
         // get data from api
         .then(function(data) {
-
+            console.log(data)
             // create data instance
             var pollDetail = data
             // get poll status (expired or not)
@@ -66,11 +66,29 @@
             // create empty variable to inster data later
             var pollOptions = ''
 
-            // create poll header (question text)
+
+            // HEADER
+            
+            // find poll status
+            if (isExpired == true) {
+                var status = 
+                `
+                <p class="status expired">Expired</p>
+                `
+            } else if (isExpired == false) {
+                var status = 
+                `
+                <p class="status active">Active</p>
+                `
+            }
+            // create poll header
             var pollHeader = `
-                <h2 class="poll-detail-question">${pollDetail['question']['question_text']}</h2>
+                ${status}
+                <h2 class="poll-detail-wrap__header--question">${pollDetail['question']['question_text']}</h2>
+                <p class="poll-detail-wrap__header--date">${pollDetail['question']['pub_date']}</p>
             </div>
             `
+
             // get all choices    
             var choices = pollDetail['choices']
 
@@ -81,10 +99,7 @@
                 // get choice id
                 var choiceId = choices[i]['id']
 
-                // es ra jandabad mindoda ?
-                // var choiceQuestionId = choices[i]['question']
-
-                // add choice details to pollOptions variable
+                // add each choice to polloptions var
                 pollOptions += `
                     <div class="choice-wrap">
                         <input type="radio" id="opt${choiceId}" name="choice" value="${choiceId}" class="choices">
@@ -95,7 +110,7 @@
 
             // create vote button
             voteBtnContent = `
-                <button type="submit" class="vote-btn" id='voteBtn'>Vote</button>
+                <button type="submit" class="vote-btn" id='voteBtn'>Submit vote</button>
             `
             // instert contect to html
             pollOptionsWrap.insertAdjacentHTML('beforeend', pollOptions)
@@ -109,15 +124,16 @@
 
             // add eventlistener to button if user can vote 
             // call voteChoice function on click
-            if (pollDetail['canVote'] == true) {
+
+            canVote = pollDetail['canVote']
+            if (canVote == true) {
                 voteBtn.addEventListener('click', function(){
-                    // on click call validation function
+                    console.log(canVote)
                     validateForm()
                 })
 
             // if user can't vote check for few options and update data based on that options
             } else {
-
                 // OPTION 1
                 // user voted and poll is not expired
                 if (data['userChoiceId'] && isExpired == false) {
@@ -161,8 +177,9 @@
             // if form is valid send data to server and disable all inputs
             if (valid == true) {
                 var choiceId = document.querySelector("input[name=choice]:checked").value
-                voteChoice(choiceId)
                 disableVote()
+                voteChoice(choiceId)
+                canVoteExtra = false 
                 document.getElementById('errorMsg').innerText = ''
             // if form is not valid show error message
             } else {
@@ -184,15 +201,16 @@
                 },
                 body:JSON.stringify({'choice':choice,})
             }).then((response) => {
-                // console.log('voted')
             })
         }
 
         // function to disable choice inputs
         function disableVote() {
-            var choices = document.getElementsByClassName('choices')
-            for (var i=0; i < choices.length; i++) {
-                choices[i].disabled = true;
+            voteBtn.disabled = true;
+            voteBtn.classList.add('disabled')
+            var inputs = document.getElementsByClassName('choices')
+            for (var i=0; i < inputs.length; i++) {
+                inputs[i].disabled = true;
             }
         }
 
@@ -211,7 +229,7 @@
                     backgroundColor: '#4b5a72',
                 },
                 'title': {
-                    // text: 'Results',
+                    text: 'Results',
                     fontSize: 18,
                     fontColor: '#854125',
                 },
@@ -256,4 +274,3 @@
 
 </script>
 {% endblock content %}
-
