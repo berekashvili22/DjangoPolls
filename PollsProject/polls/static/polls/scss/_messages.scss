@@ -1,0 +1,56 @@
+.messages-wrap {
+    width: 60%;
+    height: 50px;
+    position: absolute;
+    top: 15vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    @include flex(center, column);
+    opacity: 0.9;
+    border-radius: 3px;
+    z-index: 11;
+
+    & p {
+        @include primaryTitle(m)
+    }
+
+}
+
+.success {
+    background-color: #98f798;
+}
+
+.info {
+    background-color: $orange-red;
+
+    & p {
+        color: $background-color;
+    }
+}
+
+#messagesWrap {
+    -moz-animation: hideAnimation 0s ease-in 4s forwards;
+    /* Firefox */
+    -webkit-animation: hideAnimation 0s ease-in 4s forwards;
+    /* Safari and Chrome */
+    -o-animation: hideAnimation 0s ease-in 4s forwards;
+    /* Opera */
+    animation: hideAnimation 0s ease-in 4s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+
+@keyframes hideAnimation {
+    to {
+        width:0;
+        height:0;
+        overflow:hidden;
+    }
+}
+@-webkit-keyframes hideAnimation {
+    to {
+        width:0;
+        height:0;
+        visibility:hidden;
+    }
+}
