@@ -84,6 +84,19 @@
                     color: $background-color;
                 }
             } 
+
+            #logOut {
+                background-color: $orange-red;
+                @include transition-ease()
+
+                &:hover {
+                    background-color: $red;
+                }
+
+                a {
+                    color: $background-color;
+                }
+            }
         }
 
         &__li {
