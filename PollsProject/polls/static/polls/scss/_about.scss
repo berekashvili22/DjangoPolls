@@ -7,19 +7,19 @@
     &__title {
         @include primaryTitle(xl);
         color: $dark-blue;
-        padding-top: 50px;
+        padding-top: 80px;
     }
 
     &__sub-title {
         @include primaryTitle(giant);
-        padding-top: 30px;
+        padding-top: 50px;
         margin-bottom: 50px;
         width: 900px;
         text-align: center;
     }
 
     &__image-wrap {
-        width: 70vw;
+        width: 50vw;
         display: flex;
         align-items: center;
         justify-content: center;
