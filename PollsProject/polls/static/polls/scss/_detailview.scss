@@ -1,0 +1,142 @@
+.poll-detail-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 50px auto 50px 130px;
+    width: 80vw;
+    position: relative;
+
+    &__sidebar {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        right: -5%;
+        bottom: 5%;
+
+        & .vote-counts {
+            &__title {
+                @include mutedText(xl);
+                margin-bottom: 10px
+            }
+
+            &__count {
+                @include primaryTitle(megi);
+            }
+        }
+
+        .share-social {
+            padding-top: 50px;
+            & h3 {
+                @include mutedText(l);
+                margin-bottom: 20px;
+            }
+
+            .social-link-wrap {
+                display: flex;
+                margin-bottom: 20px;
+
+                & i {
+                    margin-right: 20px;
+                }
+            }
+        }
+    }
+
+    &__header {
+        padding: 5px;
+        border-radius: 5px;
+
+        & .status {
+            width: 70px;
+            height: 30px;
+            @include flex(center, row);
+            border-radius: 5px;
+            font-size: size(m);
+            color: $primary-color;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        & .expired {
+            background-color: $orange-red;
+        }
+
+        & .active {
+            background-color: $super-light-green;
+        }
+
+        &--question {
+            @include primaryTitle(megi);
+            margin-bottom: 15px;
+        }
+
+        &--date {
+            @include mutedText(m);
+            margin-bottom: 50px;
+        }
+    }
+
+    &__options-wrap {
+        margin-bottom: 30px;
+        width: 700px;
+
+        & .choice-wrap {
+            text-indent: 10px;
+            background-color: #fff;
+            box-shadow: 0px 1px 3px rgb(209, 202, 202);
+            height: 50px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            @include transition-ease;
+
+            &:hover {
+                box-shadow: 0px 0px 5px rgb(146, 146, 248);
+            }
+
+            & label {
+                @include primaryTitle(m)
+            }
+
+            & input {
+                color: $primary-color;
+            }
+        }
+    }
+
+    &__vote-btn-wrap {
+        .vote-btn {
+            height: 50px;
+            width: 200px;
+            border-radius: 5px;
+            background-color: $super-light-green;
+            color: $background-color;
+            font-size: size(xl);
+            @include transition-ease;
+
+            &:hover {
+                background-color: $light-green;
+            }
+        }
+
+        & .disabled {
+            cursor: not-allowed;
+
+            &:hover {
+                background-color: $super-light-green;
+            }
+        }
+    }
+}
+
+.chart-wrap {
+    display: flex;
+    width: 700px;
+    margin-top: 50px;
+    border-radius: 5px;
+    padding: 30px;
+    background-color: $elegant-white;
+}
