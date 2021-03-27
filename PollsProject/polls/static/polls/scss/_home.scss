@@ -1,47 +1,114 @@
-
-.home-header {
+.home-header-wrap {
     position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    margin: 0 auto;
-    width: 1000px;
-    @include flex(center, column);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 90vh;
+
+    .home-header {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0 auto;
+        width: 1000px;
+        @include flex(center, column);
+
+        @include medium {
+            width: 700px;
+        };
+
+        @include tablet {
+            width: 90vw;
+        };
+
+        &__title {
+            font-size: size(giant);
+            text-align: center;
+
+            @include tablet {
+                font-size: size(megi);
+            }
+
+            .opinion-span {
+                animation: color-change 3s infinite alternate;
+            }
+        }
+
+        &__button {
+            @include flex(center, row);
+            width: 270px;
+            height: 65px;
+            margin: 40px 0px;
+            color: $background-color;
+            border-radius: 5px;
+            font-size: size(xl);
+            font-weight: weight(bold);
+            background-color: $green;
+            @include transition-ease;
+
+            @include tablet {
+                width: 200px;
+            }
+
+            &:hover {
+                background-color: $dark-green;
+            }
+        }
+
+        &__text {
+            color: $muted;
+            font-size: size(s);
+        }
+    };
+
+    @keyframes color-change {
+        0% { color: $red; }
+        50% { color: $blue; }
+        100% { color: $green; }
+    };
+}
+
+.home-sub-header {
+    height: 40vh;
+    width: 100%;
+    background-color: $elegant-white;
+    @include flex(center, column)
 
     &__title {
-        font-size: size(giant);
-        text-align: center;
-        // font-weight: weight(bold);
+        @include primaryTitle(megi);
+        margin-bottom: 30px;
 
-        .opinion-span {
-            animation: color-change 3s infinite alternate;
-        }
+        @include tablet {
+            font-size: size(mega);
+        };
     }
 
-    &__button {
+    &__sub-title {
+        @include mutedText(xl);
+        margin-bottom: 30px;
+
         @include flex(center, row);
-        width: 270px;
-        height: 65px;
-        margin: 40px 0px;
+        text-align: center;
+
+        @include tablet{
+            font-size: size(l);
+            margin-bottom: 60px;
+        };
+    }
+
+    &__btn {
+        @include flex(center, row);
+        width: 170px;
+        height: 70px;
         color: $background-color;
         border-radius: 5px;
         font-size: size(xl);
         font-weight: weight(bold);
-        background-color: $green;
-        @include transition-ease
+        background-color: $blue;
+        @include transition-ease;
 
         &:hover {
-            background-color: $dark-green;
+            background-color: $dark-blue;
         }
     }
-
-    &__text {
-        color: $muted;
-        font-size: size(s);
-    }
 }
-
-@keyframes color-change {
-    0% { color: $red; }
-    50% { color: $blue; }
-    100% { color: $green; }
-  }
