@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def home(request):
@@ -13,6 +14,7 @@ def poll(reqeust):
 def polls(request):
     return render(request, 'polls/polls.html')
 
+@login_required(login_url='login')
 def pollDetail(request, pk):
     context = {'pk': pk}
     return render(request, 'polls/poll-detail.html', context)
