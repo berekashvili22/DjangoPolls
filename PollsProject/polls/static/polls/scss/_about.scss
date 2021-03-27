@@ -16,6 +16,12 @@
         margin-bottom: 50px;
         width: 900px;
         text-align: center;
+
+        @include medium {
+            width: 85vw;
+            font-size: size(mega);
+            margin-bottom: 100px;
+        };
     }
 
     &__image-wrap {
@@ -23,6 +29,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        @include small {
+            width: 80vw;
+        }
 
         .about-img {
             width: 100%;
@@ -34,6 +44,11 @@
         @include flex(flex-start, row);
         width: 70vw;
 
+        @include medium {
+            flex-direction: column;
+            margin: 0px 30px;
+        }
+
         .about-count {
             height: 150px;
             display: flex;
@@ -42,18 +57,33 @@
             align-items: left;
             margin-right: 200px;
 
+            @include medium {
+                margin-right: 0px;
+                margin-bottom: 20px;
+                width: 100%;
+
+            };
+
             &__title {
                 @include mutedText(l);
             }
 
             &__number {
                 @include primaryTitle(giant);
+
+                @include small {
+                    font-size: size(megi);
+                };
             }
 
             &__sub-title {
                 font-size: size(l);
                 font-weight: bold;
                 color: $orange-red;
+
+                @include small {
+                    font-size: size(m);
+                }
             }
         }
     }
