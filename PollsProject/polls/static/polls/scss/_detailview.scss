@@ -6,12 +6,26 @@
     width: 80vw;
     position: relative;
 
+    @include medium {
+        margin: 70px auto 50px auto;
+    }
+
+    @include small {
+        width: 90vw;
+    }
+
     &__sidebar {
         display: flex;
         flex-direction: column;
         position: absolute;
         right: -5%;
-        bottom: 5%;
+        top: 15%;
+
+        @include large {
+            padding-top: 100px;
+            position: static;
+            width: 80vw;
+        }
 
         & .vote-counts {
             &__title {
@@ -55,6 +69,13 @@
             color: $primary-color;
             font-weight: bold;
             margin-bottom: 10px;
+
+            @include medium {
+                height: 25px;
+                width: 60px;
+                font-size: size(xm);
+                margin-bottom: 20px;
+            }
         }
         
         & .expired {
@@ -68,17 +89,33 @@
         &--question {
             @include primaryTitle(megi);
             margin-bottom: 15px;
+            
+            @include medium {
+                font-size: size(mega);
+            }
+
+            @include small {
+                font-size: size(xl);
+            }
         }
 
         &--date {
             @include mutedText(m);
             margin-bottom: 50px;
+
+            @include medium {
+                font-size: size(xm);
+            }
         }
     }
 
     &__options-wrap {
         margin-bottom: 30px;
         width: 700px;
+
+        @include medium {
+            width: 90%;
+        }
 
         & .choice-wrap {
             text-indent: 10px;
@@ -99,6 +136,10 @@
 
             & label {
                 @include primaryTitle(m)
+
+                @include small {
+                    font-size: size(xm);
+                }
             }
 
             & input {
@@ -116,6 +157,12 @@
             color: $background-color;
             font-size: size(xl);
             @include transition-ease;
+
+            @include small {
+                width: 150px;
+                height: 40px;
+                font-size: size(l);
+            }
 
             &:hover {
                 background-color: $light-green;
@@ -139,4 +186,9 @@
     border-radius: 5px;
     padding: 30px;
     background-color: $elegant-white;
+
+    @include medium {
+        width: 90%;
+        padding: 1px;
+    }
 }
