@@ -25,58 +25,126 @@
 
 </head>
 <body>
+  <!-- navbar -->
   <div class="navbar">
     <div class="navbar__logo-wrap">
       <a href="{% url 'home' %}" class="logo">
         <i class="fas fa-bullhorn" id="logo_icon"></i>opini<span class="logo__span">on</span></a>
     </div>
-    <div class="navlinks">
-      <ul class="navlinks__ul">
-        <li class="navlinks__li">
-          <a href="{% url 'today' %}" class="navlinks__link">Today's Question</a>
-        </li>
-        <li class="navlinks__li">
-          <a href="{% url 'polls' %}" class="navlinks__link">Archive</a>
-        </li>
-        <li class="navlinks__li">
-          <a href="{% url 'about' %}" class="navlinks__link">
-            About<p class="about_span">US</p>
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="authlinks">
-      <ul class="authlinks__ul">
-        {% if user.is_authenticated %}
-          <li class="authlinks__li">
-            <a class="authlinks__link" href="#">{{ user.username }}</a>
+      <div class="navlinks menu">
+        <ul class="navlinks__ul">
+          <li class="navlinks__li">
+            <a href="{% url 'today' %}" class="navlinks__link">Today's Question</a>
           </li>
-          <li class="authlinks__li" id="logOut">
-            <a class="authlinks__link" href="{% url 'logout' %}">Logout</a>
+          <li class="navlinks__li">
+            <a href="{% url 'polls' %}" class="navlinks__link">Archive</a>
           </li>
-          {% else %}
-          <li class="authlinks__li">
-            <a class="authlinks__link" href="{% url 'login' %}">Login</a>
+          <li class="navlinks__li">
+            <a href="{% url 'about' %}" class="navlinks__link">
+              About<p class="about_span">US</p>
+            </a>
           </li>
-          <li class="authlinks__li" id="singUp">
-            <a class="authlinks__link" href="{% url 'register' %}">Sign Up</a>
-          </li>
-        {% endif %}
-      </ul>
-    </div>
+        </ul>
+      </div>
+      <div class="authlinks menu auth">
+        <ul class="authlinks__ul" {% if user.is_authenticated %} id="authLi" {% endif %}>
+          {% if user.is_authenticated %}
+            <li class="authlinks__li web">
+              <a class="authlinks__link" href="#" id="navUserInfo">
+                {{ user.username }} <i class="fas fa-caret-down"></i>
+              </a>
+              <div class="nav-dropdown" id="navDrop" style="display: none;">
+
+                <div class="nav-dropdown__header">
+                  <p class="fullname">{{ user.first_name }} {{ user.last_name }}</p>
+                  <p class="email">{{ user.email|truncatechars:33 }}</p>
+                  
+                </div>
+
+                <div class="nav-dropdown__linkswrapper">
+                  <a href="{% url 'home' %}">My Profile</a>
+                  <a href="{% url 'home' %}">Settings</a>
+                </div>
+
+                <div class="nav-dropdown__logout">
+                  <a class="authlinks__link" href="{% url 'logout' %}">Logout</a>
+                </div>
+
+              </div>
+            </li>
+            <li class="authlinks__li mobile">
+              <a class="authlinks__link" href="#" id="navUserInfo">
+                {{ user.username }}
+              </a>
+              <div class="nav-dropdown__logout">
+                <a class="authlinks__link" href="{% url 'logout' %}">Logout</a>
+              </div>
+            </li>
+            {% else %}
+            <li class="authlinks__li">
+              <a class="authlinks__link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="authlinks__li" id="singUp">
+              <a class="authlinks__link" href="{% url 'register' %}">Sign Up</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="navbar__burger">
+        <div class="navbar__burger--line line1"></div>
+        <div class="navbar__burger--line line2"></div>
+        <div class="navbar__burger--line line3"></div>
+      </div>
    
   </div>
+    <!-- messages cont -->
     <div class="main-container">
       {% for message in messages %}
         <div class="messages-wrap {{ message.tags }}" id="messagesWrap">
           <p>{{ message }}</p>
         </div>
       {% endfor %}
+      <!-- main content -->
       {% block content %}
       {% endblock content %}
+
+      <!-- footer -->
+      <footer class="footer">
+        <div class="footer__social-wrap">
+          <i class="fab fa-facebook-square fa-2x" style="color: #00aaec;"></i>
+            <i class="fab fa-twitter-square fa-2x" style="color:#4460a0;"></i>
+            <i class="fab fa-instagram-square fa-2x" style="color: #8134af;"></i>
+        </div>
+        <div class="footer__overview">
+          <p>Info</p><span>&#183;</span><p>Support</p><span>&#183;</span><p>Contact</p>
+        </div>
+        <div class="footer__overview">
+          <p>Terms of Use</p><span>&#183;</span><p>Privacy Police</p>
+        </div>
+        <div class="footer__copyright">
+          <span id="copyright">&copy;</span> 2021 <span style="padding: 0 5px;">&#183;</span>
+          <p>Opini<span>on</span></p>
+        </div>
+      </footer>
+
     </div>
 
     <script src="https://kit.fontawesome.com/e84f325d20.js" crossorigin="anonymous"></script>
-    <!-- <script src="{% static 'polls/js/navbar.js' %}"></script> -->
+    <script src="{% static 'polls/js/navbar.js' %}"></script>
+
+    <script>
+      var dropbtn = document.getElementById('navUserInfo')
+      var menu = document.getElementById('navDrop')
+
+      dropbtn.addEventListener('click', function() {
+        if (menu.style.display == 'none') {
+          menu.style.display = 'flex';
+        } else {
+          menu.style.display = 'none';
+        }
+      });
+
+    </script>
 </body>
 </html>
