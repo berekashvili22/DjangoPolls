@@ -14,7 +14,7 @@
     <div class="poll-detail-wrap__sidebar">
         <div class="vote-counts">
             <p class="vote-counts__title">Votes</p>
-            <p class="vote-counts__count">5</p>
+            <p class="vote-counts__count" id="totalVotes">5</p>
         </div>
         <div class="share-social">
             <h3>Share</h3>
@@ -142,6 +142,7 @@
                 <button type="submit" class="vote-btn" id='voteBtn'>Submit vote</button>
             `
             // instert contect to html
+            document.getElementById('totalVotes').innerText = data['total_votes']
             pollOptionsWrap.insertAdjacentHTML('beforeend', pollOptions)
             pollQuestionWrap.insertAdjacentHTML('beforeend', pollHeader)
             voteOptionsWrap.insertAdjacentHTML('beforeend', voteBtnContent)
@@ -248,11 +249,11 @@
         var myChart = new Chart(ctx, {
             type: 'horizontalBar',
             data: {
-                labels: data['choices_text'],
+                labels: data['chartData']['text'],
                 datasets: [{
 
                     label: 'Votes',
-                    data: data['votes_count'],
+                    data: data['chartData']['count'],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
@@ -305,7 +306,6 @@
             }
         });
 
-        console.log(data['votes_count'].length)
     });
 
 };
