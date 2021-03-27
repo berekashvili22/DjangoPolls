@@ -13,7 +13,7 @@ from . models import Question, Choice, Vote
 from . serializers import QuestionSerializer, ChoiceSerializer, VoteSerializer
 from django.shortcuts import get_object_or_404
 
-from . utils import getVoteCount, getVotesCount
+from . utils import getVoteCount, getVotesCount, getChartData
 
 
 @api_view(['GET'])
@@ -56,20 +56,18 @@ class questionList(ListAPIView):
 def questionDetail(request, pk):
     # get question and question choices
     question = Question.objects.get(pk=pk)
-
     choices = Choice.objects.filter(question=question)
-
     # serialize data
     question_serializer = QuestionSerializer(question, many=False)
     choices_serializer = ChoiceSerializer(choices, many=True)
-
     # get reqeust user
     user = request.user
 
     # check if user voted on currect question
     vote = Vote.objects.filter(user=user, choice__in=choices).first()
     canVote = None
-    # if vote exists that means user has already on that question so set canVote to false
+    # set user vote status
+    # if vote exists that means user has already voted on that question so set canVote to false
     if vote:
         canVote = False
         # get choice id to check voted radio button
@@ -79,29 +77,14 @@ def questionDetail(request, pk):
         canVote = True
         userChoiceId = None
     
-    # check if question is completed if not , if its complted set canVote to false  
+    # check if question is completed
     if question.completed == True:
         canVote = False;
 
-    # ------------------------
-    #      this data will be user for data visualization (with zingcharts)
+    # get data for chart
+    choices = choices_serializer.data
+    chartData = getChartData(choices)
 
-    # create empty lists for choice data
-    choices_text = []
-    votes_count = []
-
-    # loop through currenct question choices
-    for choice in choices_serializer.data:
-            # get choice text for each choice
-            choice_text = choice['choice_text']
-            # get vote count for each choice
-            vote_count = Vote.objects.filter(choice__id=choice['id']).count()
-
-            # add choice data to lists
-            choices_text.append(choice_text)
-            votes_count.append(vote_count)
-
-    # ------------------------
 
     # create data for front
     data = {
@@ -109,8 +92,8 @@ def questionDetail(request, pk):
         'choices': choices_serializer.data,
         'canVote': canVote,
         'userChoiceId': userChoiceId,
-        'choices_text': choices_text,
-        'votes_count': votes_count,
+        'chartData': chartData,
+        'total_votes': getVoteCount(question),
     }
 
     return Response(data)
