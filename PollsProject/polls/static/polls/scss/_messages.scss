@@ -10,8 +10,16 @@
     border-radius: 3px;
     z-index: 11;
 
+    @include small {
+        width: 80%;
+    }
+
     & p {
         @include primaryTitle(m)
+
+        @include small {
+            font-size: size(xm);
+        }
     }
 
 }
