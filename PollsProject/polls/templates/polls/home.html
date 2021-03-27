@@ -3,18 +3,31 @@
 {% load static %}
 {% block content %}
 
-
-<section class="home-header">
-    <h1 class="home-header__title">
-        Express your <span class="opinion-span">opinion</span> on important events in your country
-    </h1>
-    <a href="" class="home-header__button">
-        Vote now
-    </a>
-    <p class="home-header__text">
-        sing up for free and start voting now
-    </p>
+<section class="home-header-wrap">
+    <div class="home-header">
+        <h1 class="home-header__title">
+            Express your <span class="opinion-span">opinion</span> on important events in your country
+        </h1>
+        <a href="
+                {% if user.is_authenticated %}
+                    {% url 'today' %} 
+                {% else %} 
+                    {% url 'register' %} 
+                {% endif %}
+                "
+        class="home-header__button">
+            Vote now
+        </a>
+        <p class="home-header__text">
+            sing up for free and start voting now
+        </p>
+    </div>
 </section>
 
+<section class="home-sub-header">
+    <h1 class="home-sub-header__title">Get Started</h1>
+    <p class="home-sub-header__sub-title">Create a free account nad start creating polls instantly</p>
+    <a class="home-sub-header__btn" href="{% url 'register' %}">Sing Up</a>
+</section>
 
 {% endblock content %}
