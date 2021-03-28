@@ -15,4 +15,18 @@ class CreateUserForm(UserCreationForm):
         return email
 
 
-        
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+
+    # get request user from form context
+    def __init__(self, *args, **kwargs):
+         self.user = kwargs.pop('user',None)
+         super(UserUpdateForm, self).__init__(*args, **kwargs)
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email and email != self.user.email:
+                raise forms.ValidationError("A user with that email address already exists.")
+        return email
