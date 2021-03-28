@@ -21,7 +21,7 @@
 
 
 <script>
-    
+
     getList()
 
     function getList(apiUrl = 'http://127.0.0.1:8000/api/question-list/') { /* set default url to first page of api listdata */
@@ -34,44 +34,63 @@
         fetch(url)
         .then((resp) => resp.json())
         .then(function(data) {
+            console.log(data)
             // POLL DATA
             var pollsList = data['results']
             var votesCounts = data['votesCount']
 
+            fillContent(pollsList)
+
+            // FILTER
+
+            const selectElement = document.querySelector('.polls-list-header__dropdown');
+
+            selectElement.addEventListener('change', (event) => {
+                if (event.target.value == 'recent') {
+                    console.log(event.target.value)
+                    fillContent(pollsList.reverse())
+                  
+                } else if (event.target.value == 'oldest') {
+                    console.log(event.target.value)
+                    fillContent(pollsList.reverse())
+                }
+            });
+
             // add data to container
-            for (var i in pollsList) {
-                
-                var poll = pollsList[i]
+            function fillContent(list) {
+                listWrapper.innerHTML = "";
+                for (var i in list) {
+                    var poll = list[i]
 
-                var pollText = poll['question_text']
-                var pollId = poll['id']
-                var pollPubDate = poll['pub_date']
+                    var pollText = poll['question_text']
+                    var pollId = poll['id']
+                    var pollPubDate = poll['pub_date']
 
-                var pollVoteCount = votesCounts[pollId]
-                
-                var pollData = `
-                <a class="question-details" href="#" data-id=${pollId}>
-                    <h2 class="question-details__title">
-                        ${pollText}
-                    </h2>
-                    <p class="question-details__date-added">${pollPubDate}</p>
-                    <span class="question-details__vote-counts">
-                        <span id="voteCount">${pollVoteCount}</span> Votes
-                    </span>
-                </a>
-                `
+                    var pollVoteCount = votesCounts[pollId]
+                    
+                    var pollData = `
+                    <a class="question-details" href="#" data-id=${pollId}>
+                        <h2 class="question-details__title">
+                            ${pollText}
+                        </h2>
+                        <p class="question-details__date-added">${pollPubDate}</p>
+                        <span class="question-details__vote-counts">
+                            <span id="voteCount">${pollVoteCount}</span> Votes
+                        </span>
+                    </a>
+                    `
+                    listWrapper.insertAdjacentHTML('beforeend', pollData)
 
-                listWrapper.insertAdjacentHTML('beforeend', pollData)
+                    // add eventlistener to poll wrappers
+                    var pollWrapperLink = document.getElementsByClassName('question-details')
 
-                // add eventlistener to poll wrappers
-                var pollWrapperLink = document.getElementsByClassName('question-details')
+                    pollWrapperLink[i].addEventListener('click', function(){
+                        var id = this.dataset.id
+                        window.location.replace(`/poll/${id}/`)
+                    })
 
-                pollWrapperLink[i].addEventListener('click', function(){
-                    var id = this.dataset.id
-                    window.location.replace(`/poll/${id}/`)
-                })
-
-            };
+                };
+            }
             // PAGINATION
             
             // get pagination wrap
