@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>opinion</title>
+    <title>Opinion</title>
+    <link rel="icon" href="{% static 'polls/images/favicon.png' %}">
     <!-- local css -->
     <link rel="stylesheet" type="text/css" href="{% static 'polls/css/main.css' %}">
     <!-- google icons -->
@@ -62,8 +63,8 @@
                 </div>
 
                 <div class="nav-dropdown__linkswrapper">
-                  <a href="{% url 'home' %}">My Profile</a>
-                  <a href="{% url 'home' %}">Settings</a>
+                  <a href="{% url 'profile' %}">Profile</a>
+                  <a href="#">Pro Account</a>
                 </div>
 
                 <div class="nav-dropdown__logout">
@@ -73,7 +74,7 @@
               </div>
             </li>
             <li class="authlinks__li mobile">
-              <a class="authlinks__link" href="#" id="navUserInfo">
+              <a class="authlinks__link" href="{% url 'profile' %}" id="navUserInfo">
                 {{ user.username }}
               </a>
               <div class="nav-dropdown__logout">
