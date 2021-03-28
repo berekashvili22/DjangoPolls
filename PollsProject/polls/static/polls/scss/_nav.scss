@@ -6,6 +6,30 @@
     @include flex(space-between, row);
     width: 100%;
 
+    &__burger {
+        display: none;
+        cursor: pointer;
+        z-index: 30;
+        @include transition-ease;
+
+        @include medium {
+          display: block;
+        }
+
+        &--line {
+            @include medium {
+                @include transition-ease;
+                background-color: $primary-color;
+                height: 3px;
+                margin: 5px;
+                width: 30px;
+                border-radius: 5px;
+            }
+        }
+    }
+
+
+
     &__logo-wrap {
         // logo wrap
         .logo {
@@ -29,12 +53,17 @@
     .navlinks {
         width: 400px;
 
+        @include medium {
+            display: none;
+        }
+
         &__ul {
             width: 100%;
             @include flex(space-between, row);
         }
 
         &__li {
+            
         }
 
         &__link {
@@ -68,9 +97,62 @@
     .authlinks {
         width: 200px;
 
+        @include medium {
+            display: none;
+
+            .web {
+                display: none;
+            }
+        }
+
+        & #authLi {
+            justify-content: center;
+        }
+
         &__ul {
             width: 100%;
             @include flex(space-between, row);
+
+            & .mobile {
+                display: none;
+
+                & .authlinks__link {
+                    color: $primary-color;
+                    text-transform: capitalize;
+                    size: size(m);
+                }
+
+                & .nav-dropdown__logout {
+                    background-color: $orange-red;
+                    border-radius: 5px;
+                    padding: 0px;
+                    width: 100px;
+                    height: 50px;
+                    @include flex(center, row);
+                    @include transition-ease;
+                    margin-top: 30px;
+
+                    &:hover {
+                        background-color: $red;
+                    }
+
+                    & a {
+                        color: $background-color;
+
+                        &:hover {
+                            color: $background-color;
+                        }
+                    }
+
+                }
+
+                @include medium {
+                    display: flex;
+                    flex-direction: column;
+                    height: 200px;
+                    justify-content: space-around;
+                };
+            }
 
             #singUp {
                 background-color: $blue;
@@ -104,7 +186,81 @@
             width: 100px;
             height: 50px;
             cursor: pointer;
-            @include flex(center, row)
+            @include flex(center, row);
+            position: relative;
+
+            & .nav-dropdown {
+                position: absolute;
+                bottom: -200px;
+                z-index: 20;
+                right: 10%;
+                width: 240px;
+                height: 200px;
+                background-color: $background-color;
+                box-shadow: 0px 1px 8px rgba(119, 118, 118, 0.432);
+                border-radius: 5px;
+                overflow: hidden;
+                flex-direction: column;
+                cursor: default;
+
+                & div {
+                    display: flex;
+                    flex-direction: column;
+                    width: 80%;
+                    margin: 0px auto;
+                }
+                
+                &__header {
+                    height: 80px;
+                    padding-top: 20px;
+                    border-bottom: 1px solid $muted;
+
+                    & .fullname {
+                        font-size: size(m);
+                        color: $primary-color;
+                        font-weight: bold;
+                        text-transform: lowercase;
+                        margin-bottom: 10px;
+                    }
+
+                    & .email {
+                        font-size: size(s);
+                        color: $muted;
+                    }
+                }
+
+                &__linkswrapper {
+                    justify-content: space-evenly;
+                    height: 70px;
+                    border-bottom: 1px solid $muted;
+
+
+                    & a {
+                        color: $primary-color;
+                        font-size: size(m);
+                        font-weight: bold;
+                        @include transition-ease;
+
+                        &:hover {
+                            color: $dark-blue;
+                        }
+                    }
+                }
+
+                &__logout {
+                    padding-top: 15px;
+                    
+                    & a {
+                        color: $orange-red;
+                        @include transition-ease;
+
+                        &:hover {
+                            color: $red;
+                        }
+                    }
+                }
+                
+            }
         }
 
         &__link {
@@ -118,4 +274,68 @@
             }
         }
     }
+}
+
+.toggleBurg .line1 {
+    width: 25px;
+    transform: rotate(-45deg) translate(-6px,5px);    
+}
+.toggleBurg .line2 {
+    opacity: 0;
+}
+.toggleBurg .line3 {
+    width: 25px;
+    transform: rotate(45deg) translate(-6px,-5px);    
+}
+
+
+.responsive {
+    height: 100vh;
+    width: 100%;
+    background-color: $background-color;
+    z-index: 20;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 32px;
+    justify-content: space-between;
+    position: relative;
+
+    & .menu {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        & ul {
+            flex-direction: column;
+            height: 150px;
+
+            & li {
+                color: $primary-color;
+            }
+        }
+    }
+
+    & .auth {
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        & ul {
+            height: 100px;
+        }
+    }
+
+    & #navDrop {
+        display: none;
+    }
+
+
+}
+
+.hide-flow {
+    overflow: hidden;
 }

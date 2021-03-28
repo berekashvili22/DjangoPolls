@@ -20,6 +20,10 @@
         @include small {
             font-size: size(xm);
         }
+
+        @include mobile {
+            font-size: size(s);
+        }
     }
 
 }

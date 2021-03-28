@@ -9,6 +9,7 @@
         @include flex(center, column);
         width: 400px;
         margin: 150px auto 0px auto;
+        z-index: 10;
 
         @include small {
             width: 90%;
@@ -114,6 +115,7 @@
 
             .split {
                 flex-direction: row;
+                margin-bottom: 0px;
 
                 &__wrap {
                     @include flex(space-between, column);
@@ -174,4 +176,70 @@
     }
 
 
+}
+
+
+.reset-form {
+    & ul {
+        display: none;
+    }
+
+    .errorlist {
+        padding-bottom: 8px;
+    }
+}
+
+.update {
+    @include flex(space-around, row);
+
+    & .form-wrap {
+        padding-top: 50px;
+        @include flex(center, column);
+        width: 400px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    & .update-image {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 350px;
+
+        @include large {
+            width: 300px;
+        }
+
+        @include medium {
+            width: 250px;
+        }
+
+        @include tablet {
+            width: 200px;
+        }
+
+        @include small {
+            width: 150px;
+        }
+    }
+
+    .change-password {
+        margin-top: 50px;
+        @include flex(center, row);
+        background-color: $orange-red;
+        color: $background-color;
+        width: 100%;
+        border-radius: 7px;
+        font-size: size(l);
+        height: 50px;
+        @include transition-ease;
+
+        @include small {
+            width: 90%;
+        }
+
+        &:hover {
+            background-color: $red;
+        }
+    }
 }

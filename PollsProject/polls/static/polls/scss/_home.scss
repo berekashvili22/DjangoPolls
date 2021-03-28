@@ -107,6 +107,13 @@
         background-color: $blue;
         @include transition-ease;
 
+        @include small {
+            width: 150px;
+            height: 50px;
+            font-size: size(l);
+        }
+
+
         &:hover {
             background-color: $dark-blue;
         }

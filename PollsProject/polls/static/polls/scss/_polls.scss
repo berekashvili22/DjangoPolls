@@ -14,13 +14,24 @@
         position: relative;
         height: 200px;
 
+        @include medium {
+            width: 85vw;
+        }
+
         &__title {
-             @include primaryTitle(mega)
+             @include primaryTitle(mega);
+             @include small {
+                font-size: size(xl);
+             };
         }
 
         &__text {
             padding-top: 5px;
             @include mutedText(xm);
+            @include small {
+                padding-top: 0;
+                font-size: size(s);
+            }
         }
 
         &__dropdown {
@@ -39,6 +50,12 @@
             outline: none;
             cursor: pointer;
 
+            @include small {
+                transform: translateY(+10px);
+                width: 100px;
+                height: 40px;
+            }
+
 
             & option {
                 color: $primary-color;
@@ -51,5 +68,9 @@
     .polls-list {
         margin: 0 auto;
         width: 800px;
+
+        @include medium {
+            width: 85vw;
+        };
     }
 }
