@@ -1,0 +1,54 @@
+{% extends 'polls/main.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    
+<div class="auth-wrap update">
+    <div class="form-wrap" id="formWrap">
+
+        <header class="form-wrap__header">
+            <h1>Profile</h1>
+            <p>Update your account information</p>
+        </header>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="session-input-group split">
+                <div class="split__wrap">
+                    <label for="first_name">First Name</label>
+                    {{ form.first_name }}
+                    {{ form.first_name.errors }}
+                </div>
+                <div class="split__wrap">
+                    <label for="last_name">Last Name</label>
+                    {{ form.last_name }}
+                    {{ form.last_name.errors }}
+                </div>
+            </div>
+
+            <div class="session-input-group">
+                <label for="email">Email</label>
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+
+            <div class="session-input-group">
+                <label for="username">Username</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+
+            <div class="session-input-group">
+                <button type="submit" title="Login">Update</button>
+            </div>
+            <a href="{% url 'change_password' %}" class="change-password">Change Password</a>
+        </form>
+    </div>
+    <!-- <a href="{% url 'change_password' %}">change</a> -->
+    <img src="{% static 'polls/images/profile.svg' %}" alt="profile" class="update-image">
+    <div class="auth-wrap__shape">
+    </div>
+</div>
+
+{% endblock content %}
+
