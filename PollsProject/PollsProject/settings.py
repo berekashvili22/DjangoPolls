@@ -25,7 +25,8 @@ SECRET_KEY = 'c6$g=zc&xngm6_!@st9+vg!i559#$*1+$zv)nx+$8p-qnf2+61'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -144,3 +145,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 5,
 }
+
+
+# SMTP Configuration
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = 'True'
+EMAIL_HOST_USER = 'tornike.berekashvili.1@btu.edu.ge'
+EMAIL_HOST_PASSWORD = 'lardayina1999'
+ACCOUNT_EMAIL_VERIFICATION = 'none'

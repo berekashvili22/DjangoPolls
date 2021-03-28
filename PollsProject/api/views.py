@@ -28,16 +28,15 @@ def apiOverview(request):
 
 @api_view(['GET'])
 def questionOfTheDay(reqeust):
-
     now = timezone.localtime(timezone.now())
     question = Question.objects.filter(pub_date__lte=now).order_by('-id').first()
     serializer = QuestionSerializer(question, many=False)
-
     data = {
         'question': serializer.data,
         'votesCount': getVoteCount(question),
     }
     return Response(data)
+
 
 class questionList(ListAPIView):
     questions = Question.objects.filter(completed=True).order_by('-pub_date')
@@ -60,19 +59,15 @@ def questionDetail(request, pk):
     # serialize data
     question_serializer = QuestionSerializer(question, many=False)
     choices_serializer = ChoiceSerializer(choices, many=True)
-    # get reqeust user
     user = request.user
-
     # check if user voted on currect question
     vote = Vote.objects.filter(user=user, choice__in=choices).first()
     canVote = None
     # set user vote status
-    # if vote exists that means user has already voted on that question so set canVote to false
     if vote:
         canVote = False
         # get choice id to check voted radio button
         userChoiceId = vote.choice.id
-    # else set canVote to true
     else:
         canVote = True
         userChoiceId = None
